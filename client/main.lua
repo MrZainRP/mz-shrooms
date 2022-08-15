@@ -2,7 +2,7 @@ local QBCore = exports['qb-core']:GetCoreObject()
  
 local spawnedShrooms = 0
 local ShroomSpawns = {}
-local isPickingUpShroom = false
+local isPickingShroom = false
 local NeededAttempts = 0
 local SucceededAttempts = 0
 local FailedAttemps = 0
@@ -131,22 +131,31 @@ RegisterNetEvent('mz-shrooms:client:harvestMushroom', function()
 	end
 	QBCore.Functions.TriggerCallback('QBCore:HasItem', function(result)
 		if result then
-			if nearbyObject and IsPedOnFoot(playerPed) then
-				isPickingUpShroom = true
-				PrepareAnimShroom()
-                PickShroomMiniGame()
-				ClearPedTasks(playerPed)
-				Wait(4000)
-				DeleteObject(nearbyObject) 
-				table.remove(ShroomSpawns, nearbyID)
-				spawnedShrooms = spawnedShrooms - 1
-			else
-				if Config.NotifyType == 'qb' then
-					QBCore.Functions.Notify('This mushroom cannot be picked?', "error", 3500)
-				elseif Config.NotifyType == "okok" then
-					exports['okokNotify']:Alert("CAN'T PICK", "This mushroom cannot be picked?", 3500, "error")
-				end 
-			end
+            if isPickingShroom == false then 
+                if nearbyObject and IsPedOnFoot(playerPed) then
+                    isPickingShroom = true
+                    PrepareAnimShroom()
+                    PickShroomMiniGame()
+                    ClearPedTasks(playerPed)
+                    Wait(4000)
+                    DeleteObject(nearbyObject) 
+                    table.remove(ShroomSpawns, nearbyID)
+                    isPickingShroom = false
+                    spawnedShrooms = spawnedShrooms - 1
+                else
+                    if Config.NotifyType == 'qb' then
+                        QBCore.Functions.Notify('This mushroom cannot be picked?', "error", 3500)
+                    elseif Config.NotifyType == "okok" then
+                        exports['okokNotify']:Alert("CAN'T PICK", "This mushroom cannot be picked?", 3500, "error")
+                    end 
+                end
+            elseif isPickingShroom == true then 
+                if Config.NotifyType == 'qb' then
+                    QBCore.Functions.Notify('You are already doing something...', "error", 3500)
+                elseif Config.NotifyType == "okok" then
+                    exports['okokNotify']:Alert("CAN'T PICK", "You are already doing something...", 3500, "error")
+                end
+            end 
 		else
 			local requiredItems = {
 				[1] = {name = QBCore.Shared.Items["gardengloves"]["name"], image = QBCore.Shared.Items["gardengloves"]["image"]},
@@ -186,7 +195,8 @@ function PreparingAnimCheckShroom()
 end
 
 function PickShroomMiniGame()
-	local success = exports['qb-lock']:StartLockPickCircle(Config.ShroomskillCheck, Config.ShroomskillTime) --StartLockPickCircle(1,10) 1= how many times, 30 = time in seconds
+    local skillparse = math.random(Config.ShroomskillChecklow, Config.ShroomskillCheckhigh)
+	local success = exports['qb-lock']:StartLockPickCircle(skillparse, Config.ShroomskillTime) --StartLockPickCircle(1,10) 1= how many times, 30 = time in seconds
 	if success then
 		TriggerServerEvent('mz-shrooms:server:addShroom')
 		Wait(500)
@@ -386,14 +396,16 @@ function MakeShroomBagsMinigame(source)
                 exports['okokNotify']:Alert("MAKING BAG", "You cut the plastic to size and seal it.", 3500, "success")
             end   
             Wait(500)
-            local skillup = 0
-            local multiplier = math.random(1, 5)
-            if multiplier > 4 then
-                skillup = 1
-            else
-                skillup = 0
+            if Config.mzskills == "yes" then 
+                local skillup = 0
+                local multiplier = math.random(1, 5)
+                if multiplier > 4 then
+                    skillup = 1
+                else
+                    skillup = 0
+                end
+                exports["mz-skills"]:UpdateSkill("Drug Manufacture", skillup)
             end
-            exports["mz-skills"]:UpdateSkill("Drug Manufacture", skillup)
             FailedAttemps = 0
             SucceededAttempts = 0
             NeededAttempts = 0
@@ -515,14 +527,16 @@ function BagShroomsMinigame(source)
                 exports['okokNotify']:Alert("BAGGING SHROOMS", "You weigh out the correct product and bag it up.", 3500, "success")
             end   
             Wait(500)
-            local skillup = 0
-            local multiplier = math.random(1, 4)
-            if multiplier > 3 then
-                skillup = 2
-            else
-                skillup = 1
-            end
-            exports["mz-skills"]:UpdateSkill("Drug Manufacture", skillup)
+            if Config.mzskills == "yes" then 
+                local skillup = 0
+                local multiplier = math.random(1, 4)
+                if multiplier > 3 then
+                    skillup = 2
+                else
+                    skillup = 1
+                end
+                exports["mz-skills"]:UpdateSkill("Drug Manufacture", skillup)
+            end 
             FailedAttemps = 0
             SucceededAttempts = 0
             NeededAttempts = 0
@@ -541,13 +555,15 @@ function BagShroomsMinigame(source)
             exports['okokNotify']:Alert("PRODUCT RUINED!", "You tear the bag and drop the mushrooms...", 3500, "error")
         end
         Wait(500)
-        local deteriorate = -2
-        exports["mz-skills"]:UpdateSkill("Drug Manufacture", deteriorate)
-        if Config.NotifyType == 'qb' then
-            QBCore.Functions.Notify('-2 XP to Drug Manufacture', "error", 3500)
-        elseif Config.NotifyType == "okok" then
-            exports['okokNotify']:Alert("SKILLS", "-2 XP to Drug Manufacture", 3500, "error")
-        end   
+        if Config.mzskills == "yes" then 
+            local deteriorate = -2
+            exports["mz-skills"]:UpdateSkill("Drug Manufacture", deteriorate)
+            if Config.NotifyType == 'qb' then
+                QBCore.Functions.Notify('-2 XP to Drug Manufacture', "error", 3500)
+            elseif Config.NotifyType == "okok" then
+                exports['okokNotify']:Alert("SKILLS", "-2 XP to Drug Manufacture", 3500, "error")
+            end
+        end
         FailedAttemps = 0
         SucceededAttempts = 0
         NeededAttempts = 0
@@ -563,73 +579,79 @@ function BagShroomsProcess()
         disableMouse = false,
         disableCombat = true,
     }, {}, {}, {}, function() -- Done
-        local lvl8 = false
-        local lvl7 = false
-        local lvl6 = false
-        local lvl5 = false
-        local lvl4 = false
-        local lvl3 = false
-        local lvl2 = false
-        local lvl1 = false
-        exports["mz-skills"]:CheckSkill("Drug Manufacture", 12800, function(hasskill)
-            if hasskill then
-                lvl8 = true
+        if Config.mzskills == "yes" then 
+            local lvl8 = false
+            local lvl7 = false
+            local lvl6 = false
+            local lvl5 = false
+            local lvl4 = false
+            local lvl3 = false
+            local lvl2 = false
+            local lvl1 = false
+            exports["mz-skills"]:CheckSkill("Drug Manufacture", 12800, function(hasskill)
+                if hasskill then
+                    lvl8 = true
+                end
+            end)
+            exports["mz-skills"]:CheckSkill("Drug Manufacture", 6400, function(hasskill)
+                if hasskill then
+                    lvl7 = true
+                end
+            end)
+            exports["mz-skills"]:CheckSkill("Drug Manufacture", 3200, function(hasskill)
+                if hasskill then
+                    lvl6 = true
+                end
+            end)
+            exports["mz-skills"]:CheckSkill("Drug Manufacture", 1600, function(hasskill)
+                if hasskill then
+                    lvl5 = true
+                end
+            end)
+            exports["mz-skills"]:CheckSkill("Drug Manufacture", 800, function(hasskill)
+                if hasskill then
+                    lvl4 = true
+                end
+            end)
+            exports["mz-skills"]:CheckSkill("Drug Manufacture", 400, function(hasskill)
+                if hasskill then
+                    lvl3 = true
+                end
+            end)
+            exports["mz-skills"]:CheckSkill("Drug Manufacture", 200, function(hasskill)
+                if hasskill then
+                    lvl2 = true
+                end
+            end)
+            exports["mz-skills"]:CheckSkill("Drug Manufacture", 100, function(hasskill)
+                if hasskill then
+                    lvl1 = true
+                end
+            end)
+            if lvl8 == true then
+                TriggerServerEvent('mz-shrooms:server:receiveShroomslevel8')
+            elseif lvl7 == true then 
+                TriggerServerEvent('mz-shrooms:server:receiveShroomslevel7')
+            elseif lvl6 == true then 
+                TriggerServerEvent('mz-shrooms:server:receiveShroomslevel6')
+            elseif lvl5 == true then 
+                TriggerServerEvent('mz-shrooms:server:receiveShroomslevel5')
+            elseif lvl4 == true then 
+                TriggerServerEvent('mz-shrooms:server:receiveShroomslevel4')
+            elseif lvl3 == true then 
+                TriggerServerEvent('mz-shrooms:server:receiveShroomslevel3')
+            elseif lvl2 == true then 
+                TriggerServerEvent('mz-shrooms:server:receiveShroomslevel2')
+            elseif lvl1 == true then 
+                TriggerServerEvent('mz-shrooms:server:receiveShroomslevel1')
+            else
+                TriggerServerEvent('mz-shrooms:server:receiveShrooms')
             end
-        end)
-        exports["mz-skills"]:CheckSkill("Drug Manufacture", 6400, function(hasskill)
-            if hasskill then
-                lvl7 = true
-            end
-        end)
-        exports["mz-skills"]:CheckSkill("Drug Manufacture", 3200, function(hasskill)
-            if hasskill then
-                lvl6 = true
-            end
-        end)
-        exports["mz-skills"]:CheckSkill("Drug Manufacture", 1600, function(hasskill)
-            if hasskill then
-                lvl5 = true
-            end
-        end)
-        exports["mz-skills"]:CheckSkill("Drug Manufacture", 800, function(hasskill)
-            if hasskill then
-                lvl4 = true
-            end
-        end)
-        exports["mz-skills"]:CheckSkill("Drug Manufacture", 400, function(hasskill)
-            if hasskill then
-                lvl3 = true
-            end
-        end)
-        exports["mz-skills"]:CheckSkill("Drug Manufacture", 200, function(hasskill)
-            if hasskill then
-                lvl2 = true
-            end
-        end)
-        exports["mz-skills"]:CheckSkill("Drug Manufacture", 100, function(hasskill)
-            if hasskill then
-                lvl1 = true
-            end
-        end)
-        if lvl8 == true then
-            TriggerServerEvent('mz-shrooms:server:receiveShroomslevel8')
-        elseif lvl7 == true then 
-            TriggerServerEvent('mz-shrooms:server:receiveShroomslevel7')
-        elseif lvl6 == true then 
-            TriggerServerEvent('mz-shrooms:server:receiveShroomslevel6')
-        elseif lvl5 == true then 
-            TriggerServerEvent('mz-shrooms:server:receiveShroomslevel5')
-        elseif lvl4 == true then 
-            TriggerServerEvent('mz-shrooms:server:receiveShroomslevel4')
-        elseif lvl3 == true then 
-            TriggerServerEvent('mz-shrooms:server:receiveShroomslevel3')
-        elseif lvl2 == true then 
-            TriggerServerEvent('mz-shrooms:server:receiveShroomslevel2')
-        elseif lvl1 == true then 
-            TriggerServerEvent('mz-shrooms:server:receiveShroomslevel1')
-        else
-            TriggerServerEvent('mz-shrooms:server:receiveShrooms')
-        end
+        elseif Config.mzskills == "no" then 
+            TriggerServerEvent('mz-shrooms:server:receiveShroomsNoXP')
+        else 
+            print("Need to configure Config.mzskills properly")
+        end 
         TriggerEvent('animations:client:EmoteCommandStart', {"c"})
         ClearPedTasks(PlayerPedId())
         craftcheck = false
