@@ -54,6 +54,6 @@ If using lj-inventory, add the images to: lj-inventory/html/images/ - if you are
 
 5. "fabric" and "plastic" are a part of mz-bins (another free resource) - if your server does not have an alternative way to obtain these items (they are not a part of this resource) then you will need to substitute them out for other materials in order to effectively craft gardening gloves. You could, alternatively, simply sell the gardening gloves at the hardware store for a simple fix. 
 
-## D. FINALISATION
+## E. FINALISATION
 
 6. If you attend to all of the above steps you will need to restart the server in order for the new added items to be recognised by qb-core. Please restart your server ensuring that mz-shrooms is ensured/starts after qb-core starts (ideally it should just form part of your [qb] folder).
