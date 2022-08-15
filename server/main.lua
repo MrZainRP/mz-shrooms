@@ -170,7 +170,7 @@ RegisterServerEvent('mz-shrooms:server:receiveShrooms')
 AddEventHandler('mz-shrooms:server:receiveShrooms', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
-    local quantity = Config.Shroomlevel0
+    local quantity = math.random(Config.Shroomlevel0low, Config.Shroomlevel0high)
     Player.Functions.AddItem("shroombag", quantity, false)
     TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['shroombag'], "add", quantity)
 end)
@@ -181,7 +181,7 @@ RegisterServerEvent('mz-shrooms:server:receiveShroomslevel1')
 AddEventHandler('mz-shrooms:server:receiveShroomslevel1', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
-    local quantity = Config.Shroomlevel1
+    local quantity = math.random(Config.Shroomlevel1low, Config.Shroomlevel1high)
     Player.Functions.AddItem("shroombag", quantity, false)
     TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['shroombag'], "add", quantity)
 end)
@@ -192,7 +192,7 @@ RegisterServerEvent('mz-shrooms:server:receiveShroomslevel2')
 AddEventHandler('mz-shrooms:server:receiveShroomslevel2', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
-    local quantity = Config.Shroomlevel2
+    local quantity = math.random(Config.Shroomlevel2low, Config.Shroomlevel2high)
     Player.Functions.AddItem("shroombag", quantity, false)
     TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['shroombag'], "add", quantity)
 end)
@@ -203,7 +203,7 @@ RegisterServerEvent('mz-shrooms:server:receiveShroomslevel3')
 AddEventHandler('mz-shrooms:server:receiveShroomslevel3', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
-    local quantity = Config.Shroomlevel3
+    local quantity = math.random(Config.Shroomlevel3low, Config.Shroomlevel3high)
     Player.Functions.AddItem("shroombag", quantity, false)
     TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['shroombag'], "add", quantity)
 end)
@@ -214,7 +214,7 @@ RegisterServerEvent('mz-shrooms:server:receiveShroomslevel4')
 AddEventHandler('mz-shrooms:server:receiveShroomslevel4', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
-    local quantity = Config.Shroomlevel4
+    local quantity = math.random(Config.Shroomlevel4low, Config.Shroomlevel4high)
     Player.Functions.AddItem("shroombag", quantity, false)
     TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['shroombag'], "add", quantity)
 end)
@@ -225,7 +225,7 @@ RegisterServerEvent('mz-shrooms:server:receiveShroomslevel5')
 AddEventHandler('mz-shrooms:server:receiveShroomslevel5', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
-    local quantity = Config.Shroomlevel5
+    local quantity = math.random(Config.Shroomlevel5low, Config.Shroomlevel5high)
     Player.Functions.AddItem("shroombag", quantity, false)
     TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['shroombag'], "add", quantity)
 end)
@@ -236,7 +236,7 @@ RegisterServerEvent('mz-shrooms:server:receiveShroomslevel6')
 AddEventHandler('mz-shrooms:server:receiveShroomslevel6', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
-    local quantity = Config.Shroomlevel6
+    local quantity = math.random(Config.Shroomlevel6low, Config.Shroomlevel6high)
     Player.Functions.AddItem("shroombag", quantity, false)
     TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['shroombag'], "add", quantity)
 end)
@@ -247,7 +247,7 @@ RegisterServerEvent('mz-shrooms:server:receiveShroomslevel7')
 AddEventHandler('mz-shrooms:server:receiveShroomslevel7', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
-    local quantity = Config.Shroomlevel7
+    local quantity = math.random(Config.Shroomlevel7low, Config.Shroomlevel7high)
     Player.Functions.AddItem("shroombag", quantity, false)
     TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['shroombag'], "add", quantity)
 end)
@@ -258,7 +258,18 @@ RegisterServerEvent('mz-shrooms:server:receiveShroomslevel8')
 AddEventHandler('mz-shrooms:server:receiveShroomslevel8', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
-    local quantity = Config.Shroomlevel8
+    local quantity = math.random(Config.Shroomlevel8low, Config.Shroomlevel8high)
+    Player.Functions.AddItem("shroombag", quantity, false)
+    TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['shroombag'], "add", quantity)
+end)
+
+--MZ-SKILLS DISABLED
+
+RegisterServerEvent('mz-shrooms:server:receiveShroomsNoXP')
+AddEventHandler('mz-shrooms:server:receiveShroomsNoXP', function()
+    local src = source
+    local Player = QBCore.Functions.GetPlayer(src)
+    local quantity = math.random(Config.ShroomNoXPlow, Config.Config.ShroomNoXPhigh)
     Player.Functions.AddItem("shroombag", quantity, false)
     TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['shroombag'], "add", quantity)
 end)
