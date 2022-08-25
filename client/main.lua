@@ -682,8 +682,6 @@ RegisterNetEvent('mz-shrooms:client:Shrooms', function()
 		flags = 49,
     }, {}, {}, function() -- Done
         StopAnimTask(PlayerPedId(), "mp_suicide", "pill", 1.0)
-        TriggerServerEvent("QBCore:Server:RemoveItem", "shroombag", 1)
-        TriggerEvent("inventory:client:ItemBox", QBCore.Shared.Items["shroombag"], "remove")
         ShroomEffect()
     end, function() -- Cancel
         StopAnimTask(PlayerPedId(), "mp_suicide", "pill", 1.0)
