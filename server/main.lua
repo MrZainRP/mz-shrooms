@@ -280,4 +280,8 @@ end)
 
 QBCore.Functions.CreateUseableItem("shroombag", function(source, _)
     TriggerClientEvent("mz-shrooms:client:Shrooms", source)
+    local src = source
+    local Player = QBCore.Functions.GetPlayer(src)
+    Player.Functions.RemoveItem('shroombag', 1)
+    TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items["shroombag"], "remove", 1)
 end)
