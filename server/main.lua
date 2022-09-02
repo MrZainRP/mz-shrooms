@@ -269,7 +269,7 @@ RegisterServerEvent('mz-shrooms:server:receiveShroomsNoXP')
 AddEventHandler('mz-shrooms:server:receiveShroomsNoXP', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
-    local quantity = math.random(Config.ShroomNoXPlow, Config.Config.ShroomNoXPhigh)
+    local quantity = math.random(Config.ShroomNoXPlow, Config.ShroomNoXPhigh)
     Player.Functions.AddItem("shroombag", quantity, false)
     TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['shroombag'], "add", quantity)
 end)
