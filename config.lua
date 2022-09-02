@@ -58,4 +58,4 @@ Config.Shroomlevel8high = 14
 
 --OUTPUT (amount of final product player gets based on Drug Manufacturing level - with no mz-skills)
 Config.ShroomNoXPlow = 4
-Config.ShroomNoXPlow = 8
+Config.ShroomNoXPhigh = 8
