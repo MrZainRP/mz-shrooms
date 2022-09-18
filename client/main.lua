@@ -129,47 +129,45 @@ RegisterNetEvent('mz-shrooms:client:harvestMushroom', function()
 			nearbyObject, nearbyID = ShroomSpawns[i], i
 		end
 	end
-	QBCore.Functions.TriggerCallback('QBCore:HasItem', function(result)
-		if result then
-            if isPickingShroom == false then 
-                if nearbyObject and IsPedOnFoot(playerPed) then
-                    isPickingShroom = true
-                    PrepareAnimShroom()
-                    PickShroomMiniGame()
-                    ClearPedTasks(playerPed)
-                    Wait(4000)
-                    DeleteObject(nearbyObject) 
-                    table.remove(ShroomSpawns, nearbyID)
-                    isPickingShroom = false
-                    spawnedShrooms = spawnedShrooms - 1
-                else
-                    if Config.NotifyType == 'qb' then
-                        QBCore.Functions.Notify('This mushroom cannot be picked?', "error", 3500)
-                    elseif Config.NotifyType == "okok" then
-                        exports['okokNotify']:Alert("CAN'T PICK", "This mushroom cannot be picked?", 3500, "error")
-                    end 
-                end
-            elseif isPickingShroom == true then 
+    if QBCore.Functions.HasItem("gardengloves") then
+        if isPickingShroom == false then 
+            if nearbyObject and IsPedOnFoot(playerPed) then
+                isPickingShroom = true
+                PrepareAnimShroom()
+                PickShroomMiniGame()
+                ClearPedTasks(playerPed)
+                Wait(4000)
+                DeleteObject(nearbyObject) 
+                table.remove(ShroomSpawns, nearbyID)
+                isPickingShroom = false
+                spawnedShrooms = spawnedShrooms - 1
+            else
                 if Config.NotifyType == 'qb' then
-                    QBCore.Functions.Notify('You are already doing something...', "error", 3500)
+                    QBCore.Functions.Notify('This mushroom cannot be picked?', "error", 3500)
                 elseif Config.NotifyType == "okok" then
-                    exports['okokNotify']:Alert("CAN'T PICK", "You are already doing something...", 3500, "error")
-                end
-            end 
-		else
-			local requiredItems = {
-				[1] = {name = QBCore.Shared.Items["gardengloves"]["name"], image = QBCore.Shared.Items["gardengloves"]["image"]},
-			}  
-			if Config.NotifyType == 'qb' then
-				QBCore.Functions.Notify('These mushrooms look poisonous, better use gloves.', "error", 3500)
-			elseif Config.NotifyType == "okok" then
-				exports['okokNotify']:Alert("NEED GLOVES", "These mushrooms look poisonous, better use gloves.", 3500, "error")
-			end   
-			TriggerEvent('inventory:client:requiredItems', requiredItems, true)
-			Wait(3000)
-			TriggerEvent('inventory:client:requiredItems', requiredItems, false)
-		end
-	end, {"gardengloves"})
+                    exports['okokNotify']:Alert("CAN'T PICK", "This mushroom cannot be picked?", 3500, "error")
+                end 
+            end
+        elseif isPickingShroom == true then 
+            if Config.NotifyType == 'qb' then
+                QBCore.Functions.Notify('You are already doing something...', "error", 3500)
+            elseif Config.NotifyType == "okok" then
+                exports['okokNotify']:Alert("CAN'T PICK", "You are already doing something...", 3500, "error")
+            end
+        end 
+	else
+		local requiredItems = {
+			[1] = {name = QBCore.Shared.Items["gardengloves"]["name"], image = QBCore.Shared.Items["gardengloves"]["image"]},
+		}  
+		if Config.NotifyType == 'qb' then
+			QBCore.Functions.Notify('These mushrooms look poisonous, better use gloves.', "error", 3500)
+		elseif Config.NotifyType == "okok" then
+			exports['okokNotify']:Alert("NEED GLOVES", "These mushrooms look poisonous, better use gloves.", 3500, "error")
+		end   
+		TriggerEvent('inventory:client:requiredItems', requiredItems, true)
+		Wait(3000)
+		TriggerEvent('inventory:client:requiredItems', requiredItems, false)
+	end
 end)
 
 function PrepareAnimShroom()
@@ -195,15 +193,21 @@ function PreparingAnimCheckShroom()
 end
 
 function PickShroomMiniGame()
-    local skillparse = math.random(Config.ShroomskillChecklow, Config.ShroomskillCheckhigh)
-	local success = exports['qb-lock']:StartLockPickCircle(skillparse, Config.ShroomskillTime) --StartLockPickCircle(1,10) 1= how many times, 30 = time in seconds
-	if success then
-		TriggerServerEvent('mz-shrooms:server:addShroom')
-		Wait(500)
-		TriggerServerEvent('mz-shrooms:server:removeGlovesSuccess')
-	else
-        TriggerServerEvent('mz-shrooms:server:removeGlovesFail')
-	end
+    if Config.skillcheck then 
+        exports['ps-ui']:Circle(function(success)
+            if success then
+                TriggerServerEvent('mz-shrooms:server:addShroom')
+                Wait(500)
+                TriggerServerEvent('mz-shrooms:server:removeGlovesSuccess')
+            else
+                TriggerServerEvent('mz-shrooms:server:removeGlovesFail')
+            end
+        end, Config.ShroomskillCheck, Config.ShroomskillTime)
+    else 
+        TriggerServerEvent('mz-shrooms:server:addShroom')
+        Wait(500)
+        TriggerServerEvent('mz-shrooms:server:removeGlovesSuccess')
+    end
 end
 
 ----------------
@@ -232,35 +236,39 @@ end)
 
 RegisterNetEvent('mz-shrooms:client:MakeGloves')
 AddEventHandler('mz-shrooms:client:MakeGloves', function()
-    QBCore.Functions.TriggerCallback('QBCore:HasItem', function(result)
-        if result then
-            TriggerServerEvent("mz-shrooms:server:MakeGloves")
-        else
-            local requiredItems = {
-                [1] = {name = QBCore.Shared.Items["fabric"]["name"], image = QBCore.Shared.Items["fabric"]["image"]}, 
-            }  
-            if Config.NotifyType == 'qb' then
-                QBCore.Functions.Notify('You need some fabric to make the gloves.', "error", 3500)
-            elseif Config.NotifyType == "okok" then
-                exports['okokNotify']:Alert("NEED FABRIC", "You need some fabric to make the gloves.", 3500, "error")
-            end   
-            TriggerEvent('inventory:client:requiredItems', requiredItems, true)
-            Wait(3000)
-            TriggerEvent('inventory:client:requiredItems', requiredItems, false)
-        end
-    end, {"fabric"})
+    if QBCore.Functions.HasItem("fabric") then
+        TriggerServerEvent("mz-shrooms:server:MakeGloves")
+    else
+        local requiredItems = {
+            [1] = {name = QBCore.Shared.Items["fabric"]["name"], image = QBCore.Shared.Items["fabric"]["image"]}, 
+        }  
+        if Config.NotifyType == 'qb' then
+            QBCore.Functions.Notify('You need some fabric to make the gloves.', "error", 3500)
+        elseif Config.NotifyType == "okok" then
+            exports['okokNotify']:Alert("NEED FABRIC", "You need some fabric to make the gloves.", 3500, "error")
+        end   
+        TriggerEvent('inventory:client:requiredItems', requiredItems, true)
+        Wait(3000)
+        TriggerEvent('inventory:client:requiredItems', requiredItems, false)
+    end
 end)
 
 RegisterNetEvent('mz-shrooms:client:MakeGlovesMinigame')
 AddEventHandler('mz-shrooms:client:MakeGlovesMinigame', function(source)
     TriggerEvent('animations:client:EmoteCommandStart', {"mechanic"})
-    MakeGlovesMinigame(source)
+    if Config.skillcheck then 
+        MakeGlovesMinigame(source)
+    elseif not Config.skillcheck then
+        MakeGlovesProcess() 
+    else
+        print("You have not configued 'Config.skillcheck', please check mz-shrooms/config.lua")
+    end
 end)
 
 function MakeGlovesMinigame(source)
     local Skillbar = exports['qb-skillbar']:GetSkillbarObject()
     if NeededAttempts == 0 then
-        NeededAttempts = Config.MakeGlovesSkillCheck
+        NeededAttempts = math.random(Config.MakeGlovesLow, Config.MakeGlovesHigh)
     end
     local maxwidth = 30
     local maxduration = 3000
@@ -302,7 +310,8 @@ function MakeGlovesMinigame(source)
 end
 
 function MakeGlovesProcess()
-    QBCore.Functions.Progressbar("grind_coke", "Stitching fabric together...", (Config.MakeGlovesProgressbar * 1000), false, true, {
+    local makeglovestime = math.random(Config.MakeGlovesBarLow, Config.MakeGlovesBarHigh)
+    QBCore.Functions.Progressbar("grind_coke", "Stitching fabric together...", (makeglovestime * 1000), false, true, {
         disableMovement = true,
         disableCarMovement = true,
         disableMouse = false,
@@ -350,35 +359,39 @@ end)
 
 RegisterNetEvent('mz-shrooms:client:MakeShroomBags')
 AddEventHandler('mz-shrooms:client:MakeShroomBags', function()
-    QBCore.Functions.TriggerCallback('QBCore:HasItem', function(result)
-        if result then
-            TriggerServerEvent("mz-shrooms:server:MakeShroomBags")
-        else
-            local requiredItems = {
-                [1] = {name = QBCore.Shared.Items["plastic"]["name"], image = QBCore.Shared.Items["plastic"]["image"]},
-           }  
-            if Config.NotifyType == 'qb' then
-                QBCore.Functions.Notify('You need 2 plastic to iron out a baggy', "error", 3500)
-            elseif Config.NotifyType == "okok" then
-                exports['okokNotify']:Alert("NEED PLASTIC", "You need 2 plastic to iron out a baggy", 3500, "error")
-            end   
-            TriggerEvent('inventory:client:requiredItems', requiredItems, true)
-            Wait(3000)
-            TriggerEvent('inventory:client:requiredItems', requiredItems, false)
-        end
-    end, {"plastic"})
+    if QBCore.Functions.HasItem("plastic") then
+        TriggerServerEvent("mz-shrooms:server:MakeShroomBags")
+    else
+        local requiredItems = {
+            [1] = {name = QBCore.Shared.Items["plastic"]["name"], image = QBCore.Shared.Items["plastic"]["image"]},
+       }  
+        if Config.NotifyType == 'qb' then
+            QBCore.Functions.Notify('You need 2 plastic to iron out a baggy', "error", 3500)
+        elseif Config.NotifyType == "okok" then
+            exports['okokNotify']:Alert("NEED PLASTIC", "You need 2 plastic to iron out a baggy", 3500, "error")
+        end   
+        TriggerEvent('inventory:client:requiredItems', requiredItems, true)
+        Wait(3000)
+        TriggerEvent('inventory:client:requiredItems', requiredItems, false)
+    end
 end)
 
 RegisterNetEvent('mz-shrooms:client:MakeShroomBagsMinigame')
 AddEventHandler('mz-shrooms:client:MakeShroomBagsMinigame', function(source)
     TriggerEvent('animations:client:EmoteCommandStart', {"mechanic"})
-    MakeShroomBagsMinigame(source)
+    if Config.skillcheck then
+        MakeShroomBagsMinigame(source)
+    elseif not Config.skillcheck then
+        MakeShroomBagsProcess()
+    else
+        print("You have not configued 'Config.skillcheck', please check mz-shrooms/config.lua")
+    end
 end)
 
 function MakeShroomBagsMinigame(source)
     local Skillbar = exports['qb-skillbar']:GetSkillbarObject()
     if NeededAttempts == 0 then
-        NeededAttempts = Config.MakeShroomBagsSkillcheck
+        NeededAttempts = math.random(Config.MakeShroomBagsLow, Config.MakeShroomBagsHigh)
     end
     local maxwidth = 30
     local maxduration = 3000
@@ -396,16 +409,16 @@ function MakeShroomBagsMinigame(source)
                 exports['okokNotify']:Alert("MAKING BAG", "You cut the plastic to size and seal it.", 3500, "success")
             end   
             Wait(500)
-            if Config.mzskills == "yes" then 
-                local skillup = 0
-                local multiplier = math.random(1, 5)
-                if multiplier > 4 then
-                    skillup = 1
+            if Config.mzskills then 
+                local BetterXP = math.random(Config.drugXPlow, Config.drugXPhigh)
+                local multiplier = math.random(1, 4)
+                if multiplier > 3 then
+                    skillup = BetterXP
                 else
-                    skillup = 0
+                    skillup = Config.drugXPlow
                 end
                 exports["mz-skills"]:UpdateSkill("Drug Manufacture", skillup)
-            end
+            end 
             FailedAttemps = 0
             SucceededAttempts = 0
             NeededAttempts = 0
@@ -433,7 +446,8 @@ function MakeShroomBagsMinigame(source)
 end
 
 function MakeShroomBagsProcess()
-    QBCore.Functions.Progressbar("grind_coke", "Sealing bag...", (Config.MakeBagTime * 1000), false, true, {
+    local makebagtime = math.random(Config.MakeBagTimeLow, Config.MakeBagTimeHigh)
+    QBCore.Functions.Progressbar("grind_coke", "Sealing bag...", (makebagtime * 1000), false, true, {
         disableMovement = true,
         disableCarMovement = true,
         disableMouse = false,
@@ -480,36 +494,53 @@ end)
 
 RegisterNetEvent('mz-shrooms:client:BagShrooms')
 AddEventHandler('mz-shrooms:client:BagShrooms', function()
-    QBCore.Functions.TriggerCallback('QBCore:HasItem', function(result)
-        if result then
+    if QBCore.Functions.HasItem("shroom") then
+        if QBCore.Functions.HasItem("shroombaggy") then
             TriggerServerEvent("mz-shrooms:server:BagShrooms")
         else
             local requiredItems = {
-                [1] = {name = QBCore.Shared.Items["shroom"]["name"], image = QBCore.Shared.Items["shroom"]["image"]},
-                [2] = {name = QBCore.Shared.Items["shroombaggy"]["name"], image = QBCore.Shared.Items["shroombaggy"]["image"]},
+                [1] = {name = QBCore.Shared.Items["shroombaggy"]["name"], image = QBCore.Shared.Items["shroombaggy"]["image"]},
             }  
             if Config.NotifyType == 'qb' then
-                QBCore.Functions.Notify('You need five (5) shrooms and a bag.', "error", 3500)
+                QBCore.Functions.Notify("You need "..Config.ShroomsNeeded.." shrooms and a bag.", "error", 3500)
             elseif Config.NotifyType == "okok" then
-                exports['okokNotify']:Alert("BAG IT UP", "You need five (5) shrooms and a bag.", 3500, "error")
+                exports['okokNotify']:Alert("BAG IT UP", "You need "..Config.ShroomsNeeded.." shrooms and a bag.", 3500, "error")
             end   
             TriggerEvent('inventory:client:requiredItems', requiredItems, true)
             Wait(3000)
             TriggerEvent('inventory:client:requiredItems', requiredItems, false)
         end
-    end, {"shroom", "shroombaggy"})
+    else
+        local requiredItems = {
+            [1] = {name = QBCore.Shared.Items["shroom"]["name"], image = QBCore.Shared.Items["shroom"]["image"]},
+        }  
+        if Config.NotifyType == 'qb' then
+            QBCore.Functions.Notify("You need "..Config.ShroomsNeeded.." shrooms and a bag.", "error", 3500)
+        elseif Config.NotifyType == "okok" then
+            exports['okokNotify']:Alert("BAG IT UP", "You need "..Config.ShroomsNeeded.." shrooms and a bag.", 3500, "error")
+        end   
+        TriggerEvent('inventory:client:requiredItems', requiredItems, true)
+        Wait(3000)
+        TriggerEvent('inventory:client:requiredItems', requiredItems, false)
+    end
 end)
 
 RegisterNetEvent('mz-shrooms:client:BagShroomsMinigame')
 AddEventHandler('mz-shrooms:client:BagShroomsMinigame', function(source)
     TriggerEvent('animations:client:EmoteCommandStart', {"mechanic"})
-    BagShroomsMinigame(source)
+    if Config.skillcheck then
+        BagShroomsMinigame(source)
+    elseif not Config.skillcheck then
+        BagShroomsProcess()
+    else
+        print("You have not configued 'Config.skillcheck', please check mz-shrooms/config.lua")
+    end
 end)
 
 function BagShroomsMinigame(source)
     local Skillbar = exports['qb-skillbar']:GetSkillbarObject()
     if NeededAttempts == 0 then
-        NeededAttempts = Config.BagShroomsSkillcheck
+        NeededAttempts = math.random(Config.BagShroomsLow, Config.BagShroomsHigh)
     end
     local maxwidth = 30
     local maxduration = 3000
@@ -527,13 +558,13 @@ function BagShroomsMinigame(source)
                 exports['okokNotify']:Alert("BAGGING SHROOMS", "You weigh out the correct product and bag it up.", 3500, "success")
             end   
             Wait(500)
-            if Config.mzskills == "yes" then 
-                local skillup = 0
+            if Config.mzskills then 
+                local BetterXP = math.random(Config.drugXPlow, Config.drugXPhigh)
                 local multiplier = math.random(1, 4)
                 if multiplier > 3 then
-                    skillup = 2
+                    skillup = BetterXP
                 else
-                    skillup = 1
+                    skillup = Config.drugXPlow
                 end
                 exports["mz-skills"]:UpdateSkill("Drug Manufacture", skillup)
             end 
@@ -555,13 +586,13 @@ function BagShroomsMinigame(source)
             exports['okokNotify']:Alert("PRODUCT RUINED!", "You tear the bag and drop the mushrooms...", 3500, "error")
         end
         Wait(500)
-        if Config.mzskills == "yes" then 
-            local deteriorate = -2
+        if Config.mzskills then 
+            local deteriorate = -Config.drugXPloss
             exports["mz-skills"]:UpdateSkill("Drug Manufacture", deteriorate)
             if Config.NotifyType == 'qb' then
-                QBCore.Functions.Notify('-2 XP to Drug Manufacture', "error", 3500)
+                QBCore.Functions.Notify('-'..Config.drugXPloss..'XP to Drug Manufacture', "error", 3500)
             elseif Config.NotifyType == "okok" then
-                exports['okokNotify']:Alert("SKILLS", "-2 XP to Drug Manufacture", 3500, "error")
+                exports['okokNotify']:Alert("SKILLS", '-'..Config.drugXPloss..'XP to Drug Manufacture', 3500, "error")
             end
         end
         FailedAttemps = 0
@@ -573,13 +604,14 @@ function BagShroomsMinigame(source)
 end
 
 function BagShroomsProcess()
-    QBCore.Functions.Progressbar("grind_coke", "Bagging up product...", (Config.BagShroomsTime * 1000), false, true, {
+    local bagshroomstime = math.random(Config.BagShroomsTimeLow, Config.BagShroomsTimeHigh)
+    QBCore.Functions.Progressbar("grind_coke", "Bagging up product...", (bagshroomstime * 1000), false, true, {
         disableMovement = true,
         disableCarMovement = true,
         disableMouse = false,
         disableCombat = true,
     }, {}, {}, {}, function() -- Done
-        if Config.mzskills == "yes" then 
+        if Config.mzskills then 
             local lvl8 = false
             local lvl7 = false
             local lvl6 = false
@@ -647,10 +679,10 @@ function BagShroomsProcess()
             else
                 TriggerServerEvent('mz-shrooms:server:receiveShrooms')
             end
-        elseif Config.mzskills == "no" then 
+        elseif not Config.mzskills then 
             TriggerServerEvent('mz-shrooms:server:receiveShroomsNoXP')
         else 
-            print("Need to configure Config.mzskills properly")
+            print("You have not configured 'Config.mzskills' properly, please refer to config.lua")
         end 
         TriggerEvent('animations:client:EmoteCommandStart', {"c"})
         ClearPedTasks(PlayerPedId())
