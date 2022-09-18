@@ -16,7 +16,7 @@ RegisterNetEvent("mz-shrooms:server:addShroom",function()
     local Player = QBCore.Functions.GetPlayer(src)
     local quantum = 0
     local amount = math.random(1, 100)
-    if amount < 11 then
+    if amount <= Config.Doublechance then
         quantum = 2
         if Config.NotifyType == 'qb' then
             TriggerClientEvent('QBCore:Notify', src, "Nice! This mushroom has two heads!", "success", 3500)
@@ -78,15 +78,15 @@ AddEventHandler('mz-shrooms:server:MakeGloves', function()
     local fabric = Player.Functions.GetItemByName('fabric')
     if Player.PlayerData.items ~= nil then 
         if fabric ~= nil then 
-            if fabric.amount >= 5 then 
-                Player.Functions.RemoveItem("fabric", 5)
-                TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['fabric'], "remove", 5)
+            if fabric.amount >= Config.FabricNeeded then 
+                Player.Functions.RemoveItem("fabric", Config.FabricNeeded)
+                TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['fabric'], "remove", Config.FabricNeeded)
                 TriggerClientEvent("mz-shrooms:client:MakeGlovesMinigame", src)
             else
                 if Config.NotifyType == 'qb' then
-                    TriggerClientEvent('QBCore:Notify', src, "You need five (5) pieces of fabric...", 'error')
+                    TriggerClientEvent('QBCore:Notify', src, "You need "..Config.FabricNeeded.." pieces of fabric...", 'error')
                 elseif Config.NotifyType == "okok" then
-                    TriggerClientEvent('okokNotify:Alert', source, "NEED FABRIC", "You need five (5) pieces of fabric...", 3500, 'error')
+                    TriggerClientEvent('okokNotify:Alert', source, "NEED FABRIC", "You need "..Config.FabricNeeded.." pieces of fabric...", 3500, 'error')
                 end
             end
         end
@@ -112,15 +112,15 @@ AddEventHandler('mz-shrooms:server:MakeShroomBags', function()
     local plastic = Player.Functions.GetItemByName('plastic')
     if Player.PlayerData.items ~= nil then 
         if plastic ~= nil then 
-            if plastic.amount >= 2 then 
-                Player.Functions.RemoveItem("plastic", 2)
-                TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['plastic'], "remove", 2)
+            if plastic.amount >= Config.PlasticNeeded then 
+                Player.Functions.RemoveItem("plastic", Config.PlasticNeeded)
+                TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['plastic'], "remove", Config.PlasticNeeded)
                 TriggerClientEvent("mz-shrooms:client:MakeShroomBagsMinigame", src)
             else
                 if Config.NotifyType == 'qb' then
-                    TriggerClientEvent('QBCore:Notify', src, "You need 2 pieces of plastic to make a bag.", 'error')
+                    TriggerClientEvent('QBCore:Notify', src, "You need "..Config.PlasticNeeded.." pieces of plastic to make a bag.", 'error')
                 elseif Config.NotifyType == "okok" then
-                    TriggerClientEvent('okokNotify:Alert', source, "NEED PLASTIC", "You need 2 pieces of plastic to make a bag.", 3500, 'error')
+                    TriggerClientEvent('okokNotify:Alert', source, "NEED PLASTIC", "You need "..Config.PlasticNeeded.." pieces of plastic to make a bag.", 3500, 'error')
                 end
             end
         end
@@ -146,24 +146,27 @@ AddEventHandler('mz-shrooms:server:BagShrooms', function()
     local shroom = Player.Functions.GetItemByName('shroom')
     if Player.PlayerData.items ~= nil then 
         if shroom ~= nil then 
-            if shroom.amount >= 5 then 
-                Player.Functions.RemoveItem("shroom", 5)
-                TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['shroom'], "remove", 5)
+            if shroom.amount >= Config.ShroomsNeeded then 
+                Player.Functions.RemoveItem("shroom", Config.ShroomsNeeded)
+                TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['shroom'], "remove", Config.ShroomsNeeded)
                 Player.Functions.RemoveItem("shroombaggy", 1)
                 TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['shroombaggy'], "remove", 1)
                 TriggerClientEvent("mz-shrooms:client:BagShroomsMinigame", src)
             else
                 if Config.NotifyType == 'qb' then
-                    TriggerClientEvent('QBCore:Notify', src, "You need five (5) shrooms and a bag.", 'error')
+                    TriggerClientEvent('QBCore:Notify', src, "You need "..Config.ShroomsNeeded.." shrooms and a bag.", 'error')
                 elseif Config.NotifyType == "okok" then
-                    TriggerClientEvent('okokNotify:Alert', source, "BAG IT UP", "You need five (5) shrooms and a bag.", 3500, 'error')
+                    TriggerClientEvent('okokNotify:Alert', source, "BAG IT UP", "You need "..Config.ShroomsNeeded.." shrooms and a bag.", 3500, 'error')
                 end
             end
         end
     end
 end)
 
+----------
 --OUTPUT--
+----------
+
 --LEVEL 0
 
 RegisterServerEvent('mz-shrooms:server:receiveShrooms')
@@ -263,13 +266,15 @@ AddEventHandler('mz-shrooms:server:receiveShroomslevel8', function()
     TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['shroombag'], "add", quantity)
 end)
 
---MZ-SKILLS DISABLED
+----------------------
+--MZ-SKILLS DISABLED--
+----------------------
 
 RegisterServerEvent('mz-shrooms:server:receiveShroomsNoXP')
 AddEventHandler('mz-shrooms:server:receiveShroomsNoXP', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
-    local quantity = math.random(Config.ShroomNoXPlow, Config.ShroomNoXPhigh)
+    local quantity = math.random(Config.ShroomNoXPlow, Config.Config.ShroomNoXPhigh)
     Player.Functions.AddItem("shroombag", quantity, false)
     TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items['shroombag'], "add", quantity)
 end)
