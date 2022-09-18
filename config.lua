@@ -16,11 +16,10 @@ Config.drugXPlow = 1                                        -- Lowest "Drug Manu
 Config.drugXPhigh = 3                                       -- Highest "Drug Manufacture" XP awarded to player.
 Config.drugXPloss = 2                                       -- "Drug Manufacture" XP lost for failing skill check.
 
-Config.skillcheck = true                                    -- Change to "false" to remove skillchecks from crafting processes
+Config.skillcheck = true                                   -- Change to "false" to remove skillchecks from picking and crafting processes.
 
 --Picking shrooms
-Config.ShroomskillChecklow = 1                              -- Lowest number of parses of the skill check
-Config.ShroomskillCheckhigh = 3                             -- Highest number of parses of the skill check
+Config.ShroomskillCheck = 1                                 -- Lowest number of parses of the skill check
 Config.ShroomskillTime = 10                                 -- Time to complete skill check, the lower - the more difficult. 
 Config.Doublechance = 10                                    -- Chance (in percentage) to pull two mushrooms at once. (Set to 0 to disable)
 
