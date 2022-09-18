@@ -1,33 +1,59 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 
+--------------
+--MZ-SHROOMS--
+--------------
+
 Config = {}
 
-Config.ShroomField = vector3(3266.64, 5215.32, 19.65) -- Location of shroom field - NOTE: NO SUPPORT OFFERED FOR LOCATION CHANGES
+Config.ShroomField = vector3(3266.64, 5215.32, 19.65)       -- Location of shroom field - NOTE: NO SUPPORT OFFERED FOR LOCATION CHANGES
 
-Config.NotifyType = "okok" -- Notification type: 'qb' for qb-core standard notifications, 'okok' for okokNotify notifications
+Config.NotifyType = "okok"                                  -- Notification type: 'qb' for qb-core standard notifications, 'okok' for okokNotify notifications
 
-Config.mzskills = "yes" -- Change to "No" to run resource without regard to mz-skills "Drug Manufacturing"
- 
+Config.mzskills = true                                      -- Change to "false" to run resource without regard to mz-skills "Drug Manufacturing"
+-- if Config.mzskills = true, then the following parameters apply: 
+Config.drugXPlow = 1                                        -- Lowest "Drug Manufacture" XP awarded to player.
+Config.drugXPhigh = 3                                       -- Highest "Drug Manufacture" XP awarded to player.
+Config.drugXPloss = 2                                       -- "Drug Manufacture" XP lost for failing skill check.
+
+Config.skillcheck = true                                    -- Change to "false" to remove skillchecks from crafting processes
+
 --Picking shrooms
-Config.ShroomskillChecklow = 1 -- Lowest number of parses of the skill check
-Config.ShroomskillCheckhigh = 3 -- Highest number of parses of the skill check
-Config.ShroomskillTime = 10 -- Time to complete skill check, the lower - the more difficult. 
+Config.ShroomskillChecklow = 1                              -- Lowest number of parses of the skill check
+Config.ShroomskillCheckhigh = 3                             -- Highest number of parses of the skill check
+Config.ShroomskillTime = 10                                 -- Time to complete skill check, the lower - the more difficult. 
+Config.Doublechance = 10                                    -- Chance (in percentage) to pull two mushrooms at once. (Set to 0 to disable)
+
 --Making gloves
-Config.MakeGlovesSkillCheck = math.random(3, 5) -- Number of parses of the skill check
-Config.MakeGlovesProgressbar = math.random(7, 12) -- Time it takes (in seconds) to craft gardening gloves.
+Config.MakeGlovesLow = 3                                    -- Lowest number of parses of the skill check
+Config.MakeGlovesHigh = 5                                   -- Highest number of parses of the skill check
+Config.MakeGlovesBarLow = 7                                 -- Lowest time it takes (in seconds) to craft gardening gloves.
+Config.MakeGlovesBarHigh = 12                               -- Highest time it takes (in seconds) to craft gardening gloves.
+Config.FabricNeeded = 5                                     -- Amount of fabric needed to craft gardening gloves (fabric comes from mz-bins if not otherwise in the server)
+
 --Making shroom bag
-Config.MakeShroomBagsSkillcheck = math.random(2, 4) -- Number of parses of the skill check
-Config.MakeBagTime = math.random(2, 4) -- Time it takes (in seconds) to craft drug bag.
---Making shroom bag
-Config.BagShroomsSkillcheck = math.random(3, 5) -- Number of parses of the skill check
-Config.BagShroomsTime = math.random(4, 8) -- Time it takes (in seconds) to craft drug bag.
+Config.MakeShroomBagsLow = 2                                -- Lowest number of parses of the skill check to make shroom bags.
+Config.MakeShroomBagsHigh = 4                               -- Highest number of parses of the skill check to make shroom bags.
+Config.MakeBagTimeLow = 2                                   -- Lowest time it takes (in seconds) to craft drug bag.
+Config.MakeBagTimeHigh = 4                                  -- Highest time it takes (in seconds) to craft drug bag.
+Config.PlasticNeeded = 2                                    -- Number of plastic needed to make a shroom baggy.
+
+--Bag up shrooms
+Config.BagShroomsLow = 3                                    -- Lowest number of parses of the skill check
+Config.BagShroomsHigh = 5                                   -- Highest number of parses of the skill check
+Config.BagShroomsTimeLow = 4                                -- Lowest time it takes (in seconds) to bag up shrooms.
+Config.BagShroomsTimeHigh = 8                               -- Highest time it takes (in seconds) to bag up shrooms.
+Config.ShroomsNeeded = 5                                    -- Number of shrooms needed to make a bag them up.
 
 --Glove tear (removes gloves from player)
-Config.GloveTearFailChance = 15 -- percentage chance to remove gloves from player upon player failing skill check (set to 0 to disable)
-Config.GloveTearSuccessChance = 2 --percentage chance to remove gloves from player even if player is successful at skill check (set to 0 to disable)
+Config.GloveTearFailChance = 15                             -- percentage chance to remove gloves from player upon player failing skill check (set to 0 to disable)
+Config.GloveTearSuccessChance = 2                           -- percentage chance to remove gloves from player even if player is successful at skill check (set to 0 to disable)
 
 --MZ-SKILLS
---OUTPUT (amount of final product player gets based on Drug Manufacturing level - with mz-skills)
+----------
+--OUTPUT--
+----------
+-- (amount of final product player gets based on Drug Manufacturing level - with mz-skills)
 --Level 0--
 Config.Shroomlevel0low = 1
 Config.Shroomlevel0high = 3
