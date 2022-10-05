@@ -60,4 +60,4 @@ If using lj-inventory, add the images to: lj-inventory/html/images/ - if you are
 
 ## F. mz-resource
 
-7. Changes are now pushed to mz-resources Discord: https://discord.gg/CqNYvE3CkA
+7. [Testing] Changes are now pushed to mz-resources Discord: https://discord.gg/CqNYvE3CkA
