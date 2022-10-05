@@ -57,3 +57,7 @@ If using lj-inventory, add the images to: lj-inventory/html/images/ - if you are
 ## E. FINALISATION
 
 6. If you attend to all of the above steps you will need to restart the server in order for the new added items to be recognised by qb-core. Please restart your server ensuring that mz-shrooms is ensured/starts after qb-core starts (ideally it should just form part of your [qb] folder).
+
+## F. mz-resource
+
+7. Changes are now pushed to mz-resources Discord: https://discord.gg/CqNYvE3CkA
