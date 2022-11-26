@@ -6,7 +6,12 @@ local QBCore = exports['qb-core']:GetCoreObject()
 
 Config = {}
 
-Config.ShroomField = vector3(3266.64, 5215.32, 19.65)       -- Location of shroom field - NOTE: NO SUPPORT OFFERED FOR LOCATION CHANGES
+Config.ShroomField = vector3(3266.64, 5215.32, 19.65)       -- Location of shroom field - PLEASE NOTE: NO SUPPORT OFFERED FOR LOCATION CHANGES
+Config.ShroomHeight = 18.66                                 -- The height at which you want the shroom prop to appear i.e. set it to the ground level or the "z" level 
+                                                            -- (When setting the zone for shrooms to appear please use flat open areas, not hills.) 
+Config.ShroomRounded = 19                                   -- Round the shroom height from the previous variable to the nearest whole number
+
+Config.ShroomProp = `prop_stoneshroom1`                     -- GTA V prop asset to be collected
 
 Config.NotifyType = "okok"                                  -- Notification type: 'qb' for qb-core standard notifications, 'okok' for okokNotify notifications
 
@@ -17,7 +22,6 @@ Config.drugXPhigh = 3                                       -- Highest "Drug Man
 Config.drugXPloss = 2                                       -- "Drug Manufacture" XP lost for failing skill check.
 
 Config.skillcheck = true                                   -- Change to "false" to remove skillchecks from picking and crafting processes.
-
 --Picking shrooms
 Config.ShroomskillCheck = 1                                 -- Lowest number of parses of the skill check
 Config.ShroomskillTime = 10                                 -- Time to complete skill check, the lower - the more difficult. 

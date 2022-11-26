@@ -95,21 +95,21 @@ function GenerateShroomCoords()
 end
 
 function GetCoordZShrooms(x, y)
-	local groundCheckHeights = { 15, 16.0, 17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0 }
+	local groundCheckHeights = { (Config.ShroomRounded - 4), (Config.ShroomRounded - 3), (Config.ShroomRounded - 2), (Config.ShroomRounded - 1), Config.ShroomRounded, (Config.ShroomRounded + 1), (Config.ShroomRounded + 2), (Config.ShroomRounded + 3), (Config.ShroomRounded + 4), (Config.ShroomRounded + 5), (Config.ShroomRounded + 6) }
 	for i, height in ipairs(groundCheckHeights) do
 		local foundGround, z = GetGroundZFor_3dCoord(x, y, height)
 		if foundGround then
 			return z
 		end
 	end
-	return 18.66
+	return Config.ShroomHeight
 end
 
 ------------------
 ---PICK SHROOMS---
 ------------------
 
-exports['qb-target']:AddTargetModel(`prop_stoneshroom1`, {
+exports['qb-target']:AddTargetModel(Config.ShroomProp, {
 	options = {
 		{
 			event = "mz-shrooms:client:harvestMushroom",
@@ -261,7 +261,7 @@ AddEventHandler('mz-shrooms:client:MakeGlovesMinigame', function(source)
     elseif not Config.skillcheck then
         MakeGlovesProcess() 
     else
-        print("You have not configued 'Config.skillcheck', please check mz-shrooms/config.lua")
+        print("You have not properly configued 'Config.skillcheck', please check mz-shrooms/config.lua")
     end
 end)
 
@@ -322,7 +322,6 @@ function MakeGlovesProcess()
         ClearPedTasks(PlayerPedId())
         craftcheck = false
     end, function() -- Cancel
-        openingDoor = false
         ClearPedTasks(PlayerPedId())
         if Config.NotifyType == 'qb' then
             QBCore.Functions.Notify('Process Cancelled', "error", 3500)
@@ -458,7 +457,6 @@ function MakeShroomBagsProcess()
         ClearPedTasks(PlayerPedId())
         craftcheck = false
     end, function() -- Cancel
-        openingDoor = false
         ClearPedTasks(PlayerPedId())
         if Config.NotifyType == 'qb' then
             QBCore.Functions.Notify('Process Cancelled', "error", 3500)
@@ -621,44 +619,28 @@ function BagShroomsProcess()
             local lvl2 = false
             local lvl1 = false
             exports["mz-skills"]:CheckSkill("Drug Manufacture", 12800, function(hasskill)
-                if hasskill then
-                    lvl8 = true
-                end
+                if hasskill then lvl8 = true end
             end)
             exports["mz-skills"]:CheckSkill("Drug Manufacture", 6400, function(hasskill)
-                if hasskill then
-                    lvl7 = true
-                end
+                if hasskill then lvl7 = true end
             end)
             exports["mz-skills"]:CheckSkill("Drug Manufacture", 3200, function(hasskill)
-                if hasskill then
-                    lvl6 = true
-                end
+                if hasskill then lvl6 = true end
             end)
             exports["mz-skills"]:CheckSkill("Drug Manufacture", 1600, function(hasskill)
-                if hasskill then
-                    lvl5 = true
-                end
+                if hasskill then lvl5 = true end
             end)
             exports["mz-skills"]:CheckSkill("Drug Manufacture", 800, function(hasskill)
-                if hasskill then
-                    lvl4 = true
-                end
+                if hasskill then lvl4 = true end
             end)
             exports["mz-skills"]:CheckSkill("Drug Manufacture", 400, function(hasskill)
-                if hasskill then
-                    lvl3 = true
-                end
+                if hasskill then lvl3 = true end
             end)
             exports["mz-skills"]:CheckSkill("Drug Manufacture", 200, function(hasskill)
-                if hasskill then
-                    lvl2 = true
-                end
+                if hasskill then lvl2 = true end
             end)
             exports["mz-skills"]:CheckSkill("Drug Manufacture", 100, function(hasskill)
-                if hasskill then
-                    lvl1 = true
-                end
+                if hasskill then lvl1 = true end
             end)
             if lvl8 == true then
                 TriggerServerEvent('mz-shrooms:server:receiveShroomslevel8')
@@ -688,7 +670,6 @@ function BagShroomsProcess()
         ClearPedTasks(PlayerPedId())
         craftcheck = false
     end, function() -- Cancel
-        openingDoor = false
         ClearPedTasks(PlayerPedId())
         if Config.NotifyType == 'qb' then
             QBCore.Functions.Notify('Process Cancelled', "error", 3500)
