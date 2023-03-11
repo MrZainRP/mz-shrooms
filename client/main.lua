@@ -1,8 +1,11 @@
 local QBCore = exports['qb-core']:GetCoreObject()
- 
-local spawnedShrooms = 0
+
 local ShroomSpawns = {}
+
 local isPickingShroom = false
+local withinShroomZone = false 
+
+local spawnedShrooms = 0
 local NeededAttempts = 0
 local SucceededAttempts = 0
 local FailedAttemps = 0
@@ -17,9 +20,11 @@ CreateThread(function()
 		local coords = GetEntityCoords(PlayerPedId())
 		if GetDistanceBetweenCoords(coords, Config.ShroomField, true) < 50 then
 			SpawnShroomSpawns()
+            withinShroomZone = true 
 			Wait(500)
 		else
-			Wait(500)
+			withinShroomZone = false 
+            Wait(3000)
 		end
 	end
 end)
@@ -129,45 +134,53 @@ RegisterNetEvent('mz-shrooms:client:harvestMushroom', function()
 			nearbyObject, nearbyID = ShroomSpawns[i], i
 		end
 	end
-    if QBCore.Functions.HasItem("gardengloves") then
-        if isPickingShroom == false then 
-            if nearbyObject and IsPedOnFoot(playerPed) then
-                isPickingShroom = true
-                PrepareAnimShroom()
-                PickShroomMiniGame()
-                ClearPedTasks(playerPed)
-                Wait(4000)
-                DeleteObject(nearbyObject) 
-                table.remove(ShroomSpawns, nearbyID)
-                isPickingShroom = false
-                spawnedShrooms = spawnedShrooms - 1
-            else
+    if withinShroomZone then 
+        if QBCore.Functions.HasItem("gardengloves") then
+            if isPickingShroom == false then 
+                if nearbyObject and IsPedOnFoot(playerPed) then
+                    isPickingShroom = true
+                    PrepareAnimShroom()
+                    PickShroomMiniGame()
+                    ClearPedTasks(playerPed)
+                    Wait(4000)
+                    DeleteObject(nearbyObject) 
+                    table.remove(ShroomSpawns, nearbyID)
+                    isPickingShroom = false
+                    spawnedShrooms = spawnedShrooms - 1
+                else
+                    if Config.NotifyType == 'qb' then
+                        QBCore.Functions.Notify('This mushroom cannot be picked?', "error", 3500)
+                    elseif Config.NotifyType == "okok" then
+                        exports['okokNotify']:Alert("CAN'T PICK", "This mushroom cannot be picked?", 3500, "error")
+                    end 
+                end
+            elseif isPickingShroom == true then 
                 if Config.NotifyType == 'qb' then
-                    QBCore.Functions.Notify('This mushroom cannot be picked?', "error", 3500)
+                    QBCore.Functions.Notify('You are already doing something...', "error", 3500)
                 elseif Config.NotifyType == "okok" then
-                    exports['okokNotify']:Alert("CAN'T PICK", "This mushroom cannot be picked?", 3500, "error")
-                end 
-            end
-        elseif isPickingShroom == true then 
+                    exports['okokNotify']:Alert("CAN'T PICK", "You are already doing something...", 3500, "error")
+                end
+            end 
+        else
+            local requiredItems = {
+                [1] = {name = QBCore.Shared.Items["gardengloves"]["name"], image = QBCore.Shared.Items["gardengloves"]["image"]},
+            }  
             if Config.NotifyType == 'qb' then
-                QBCore.Functions.Notify('You are already doing something...', "error", 3500)
+                QBCore.Functions.Notify('These mushrooms look poisonous, better use gloves.', "error", 3500)
             elseif Config.NotifyType == "okok" then
-                exports['okokNotify']:Alert("CAN'T PICK", "You are already doing something...", 3500, "error")
-            end
-        end 
-	else
-		local requiredItems = {
-			[1] = {name = QBCore.Shared.Items["gardengloves"]["name"], image = QBCore.Shared.Items["gardengloves"]["image"]},
-		}  
-		if Config.NotifyType == 'qb' then
-			QBCore.Functions.Notify('These mushrooms look poisonous, better use gloves.', "error", 3500)
-		elseif Config.NotifyType == "okok" then
-			exports['okokNotify']:Alert("NEED GLOVES", "These mushrooms look poisonous, better use gloves.", 3500, "error")
-		end   
-		TriggerEvent('inventory:client:requiredItems', requiredItems, true)
-		Wait(3000)
-		TriggerEvent('inventory:client:requiredItems', requiredItems, false)
-	end
+                exports['okokNotify']:Alert("NEED GLOVES", "These mushrooms look poisonous, better use gloves.", 3500, "error")
+            end   
+            TriggerEvent('inventory:client:requiredItems', requiredItems, true)
+            Wait(3000)
+            TriggerEvent('inventory:client:requiredItems', requiredItems, false)
+        end
+    else 
+        if Config.NotifyType == 'qb' then
+            QBCore.Functions.Notify('These cannot be harvested...', "error", 3500)
+        elseif Config.NotifyType == "okok" then
+            exports['okokNotify']:Alert("WRONG SHROOMS", "These cannot be harvested...", 3500, "error")
+        end  
+    end
 end)
 
 function PrepareAnimShroom()
@@ -234,8 +247,7 @@ CreateThread(function()
      })
 end)
 
-RegisterNetEvent('mz-shrooms:client:MakeGloves')
-AddEventHandler('mz-shrooms:client:MakeGloves', function()
+RegisterNetEvent('mz-shrooms:client:MakeGloves', function()
     if QBCore.Functions.HasItem("fabric") then
         TriggerServerEvent("mz-shrooms:server:MakeGloves")
     else
@@ -253,8 +265,7 @@ AddEventHandler('mz-shrooms:client:MakeGloves', function()
     end
 end)
 
-RegisterNetEvent('mz-shrooms:client:MakeGlovesMinigame')
-AddEventHandler('mz-shrooms:client:MakeGlovesMinigame', function(source)
+RegisterNetEvent('mz-shrooms:client:MakeGlovesMinigame', function(source)
     TriggerEvent('animations:client:EmoteCommandStart', {"mechanic"})
     if Config.skillcheck then 
         MakeGlovesMinigame(source)
@@ -356,8 +367,7 @@ CreateThread(function()
      })
 end)
 
-RegisterNetEvent('mz-shrooms:client:MakeShroomBags')
-AddEventHandler('mz-shrooms:client:MakeShroomBags', function()
+RegisterNetEvent('mz-shrooms:client:MakeShroomBags', function()
     if QBCore.Functions.HasItem("plastic") then
         TriggerServerEvent("mz-shrooms:server:MakeShroomBags")
     else
@@ -375,8 +385,7 @@ AddEventHandler('mz-shrooms:client:MakeShroomBags', function()
     end
 end)
 
-RegisterNetEvent('mz-shrooms:client:MakeShroomBagsMinigame')
-AddEventHandler('mz-shrooms:client:MakeShroomBagsMinigame', function(source)
+RegisterNetEvent('mz-shrooms:client:MakeShroomBagsMinigame', function(source)
     TriggerEvent('animations:client:EmoteCommandStart', {"mechanic"})
     if Config.skillcheck then
         MakeShroomBagsMinigame(source)
@@ -490,8 +499,7 @@ CreateThread(function()
      })
 end)
 
-RegisterNetEvent('mz-shrooms:client:BagShrooms')
-AddEventHandler('mz-shrooms:client:BagShrooms', function()
+RegisterNetEvent('mz-shrooms:client:BagShrooms', function()
     if QBCore.Functions.HasItem("shroom") then
         if QBCore.Functions.HasItem("shroombaggy") then
             TriggerServerEvent("mz-shrooms:server:BagShrooms")
@@ -523,8 +531,7 @@ AddEventHandler('mz-shrooms:client:BagShrooms', function()
     end
 end)
 
-RegisterNetEvent('mz-shrooms:client:BagShroomsMinigame')
-AddEventHandler('mz-shrooms:client:BagShroomsMinigame', function(source)
+RegisterNetEvent('mz-shrooms:client:BagShroomsMinigame', function(source)
     TriggerEvent('animations:client:EmoteCommandStart', {"mechanic"})
     if Config.skillcheck then
         BagShroomsMinigame(source)

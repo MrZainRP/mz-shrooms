@@ -1,10 +1,10 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 
+Config = {}
+
 --------------
 --MZ-SHROOMS--
 --------------
-
-Config = {}
 
 Config.ShroomField = vector3(3266.64, 5215.32, 19.65)       -- Location of shroom field - PLEASE NOTE: NO SUPPORT OFFERED FOR LOCATION CHANGES
 Config.ShroomHeight = 18.66                                 -- The height at which you want the shroom prop to appear i.e. set it to the ground level or the "z" level 
@@ -15,17 +15,28 @@ Config.ShroomProp = `prop_stoneshroom1`                     -- GTA V prop asset 
 
 Config.NotifyType = "okok"                                  -- Notification type: 'qb' for qb-core standard notifications, 'okok' for okokNotify notifications
 
+-------------
+--MZ-SKILLS--
+-------------
 Config.mzskills = true                                      -- Change to "false" to run resource without regard to mz-skills "Drug Manufacturing"
--- if Config.mzskills = true, then the following parameters apply: 
+-- if "Config.mzskills = true", then the following parameters apply: 
 Config.drugXPlow = 1                                        -- Lowest "Drug Manufacture" XP awarded to player.
 Config.drugXPhigh = 3                                       -- Highest "Drug Manufacture" XP awarded to player.
 Config.drugXPloss = 2                                       -- "Drug Manufacture" XP lost for failing skill check.
 
-Config.skillcheck = true                                   -- Change to "false" to remove skillchecks from picking and crafting processes.
+---------------
+--SKILL CHECK--
+---------------
+
+Config.skillcheck = true                                    -- Change to "false" to remove skillchecks from picking and crafting processes.
 --Picking shrooms
 Config.ShroomskillCheck = 1                                 -- Lowest number of parses of the skill check
 Config.ShroomskillTime = 10                                 -- Time to complete skill check, the lower - the more difficult. 
 Config.Doublechance = 10                                    -- Chance (in percentage) to pull two mushrooms at once. (Set to 0 to disable)
+
+------------
+--CRAFTING--
+------------
 
 --Making gloves
 Config.MakeGlovesLow = 3                                    -- Lowest number of parses of the skill check
@@ -52,10 +63,10 @@ Config.ShroomsNeeded = 5                                    -- Number of shrooms
 Config.GloveTearFailChance = 15                             -- percentage chance to remove gloves from player upon player failing skill check (set to 0 to disable)
 Config.GloveTearSuccessChance = 2                           -- percentage chance to remove gloves from player even if player is successful at skill check (set to 0 to disable)
 
---MZ-SKILLS
 ----------
 --OUTPUT--
 ----------
+-- if "Config.mzskills = true", then the following parameters apply: 
 -- (amount of final product player gets based on Drug Manufacturing level - with mz-skills)
 --Level 0--
 Config.Shroomlevel0low = 1
@@ -85,6 +96,7 @@ Config.Shroomlevel7high = 12
 Config.Shroomlevel8low = 6
 Config.Shroomlevel8high = 14
 
+-- if "Config.mzskills = false", then the following parameters apply: 
 --OUTPUT (amount of final product player gets based on Drug Manufacturing level - with no mz-skills)
 Config.ShroomNoXPlow = 4
 Config.ShroomNoXPhigh = 8
