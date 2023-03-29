@@ -29,6 +29,10 @@ Config.drugXPloss = 2                                       -- "Drug Manufacture
 ---------------
 
 Config.skillcheck = true                                    -- Change to "false" to remove skillchecks from picking and crafting processes.
+Config.SkillUse = 'ps-ui'                                   -- Change to either 'ps-ui' for the picking the mushrooms or, 'skillbar' for the qb-skillbar export.
+Config.SkillbarDuration = math.random(2000,4000)            -- How long the skillbar runs for.
+Config.SkillbarPos = math.random(20,30)                     -- How far to the right the static box is.
+Config.SkillbarWidth = math.random(20,30)                   -- How wide the static box is.
 --Picking shrooms
 Config.ShroomskillCheck = 1                                 -- Lowest number of parses of the skill check
 Config.ShroomskillTime = 10                                 -- Time to complete skill check, the lower - the more difficult. 
@@ -39,6 +43,7 @@ Config.Doublechance = 10                                    -- Chance (in percen
 ------------
 
 --Making gloves
+Config.UseGloves = true                                     -- Ability to force player to use gloves to pick shrooms (true), (false) Deletes the polyzone to make gloves and allows players to pick without gloves.
 Config.MakeGlovesLow = 3                                    -- Lowest number of parses of the skill check
 Config.MakeGlovesHigh = 5                                   -- Highest number of parses of the skill check
 Config.MakeGlovesBarLow = 7                                 -- Lowest time it takes (in seconds) to craft gardening gloves.

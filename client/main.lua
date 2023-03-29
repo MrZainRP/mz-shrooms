@@ -135,6 +135,7 @@ RegisterNetEvent('mz-shrooms:client:harvestMushroom', function()
 		end
 	end
     if withinShroomZone then 
+        if Config.UseGloves == true then
         if QBCore.Functions.HasItem("gardengloves") then
             if isPickingShroom == false then 
                 if nearbyObject and IsPedOnFoot(playerPed) then
@@ -174,14 +175,46 @@ RegisterNetEvent('mz-shrooms:client:harvestMushroom', function()
             Wait(3000)
             TriggerEvent('inventory:client:requiredItems', requiredItems, false)
         end
+    else
+        if not Config.UseGloves then
+            if withinShroomZone then
+                    if isPickingShroom == false then 
+                        if nearbyObject and IsPedOnFoot(playerPed) then
+                            isPickingShroom = true
+                            PrepareAnimShroom()
+                            PickShroomMiniGame()
+                            ClearPedTasks(playerPed)
+                            Wait(4000)
+                            DeleteObject(nearbyObject) 
+                            table.remove(ShroomSpawns, nearbyID)
+                            isPickingShroom = false
+                            spawnedShrooms = spawnedShrooms - 1
+                        else
+                            if Config.NotifyType == 'qb' then
+                                QBCore.Functions.Notify('This mushroom cannot be picked?', "error", 3500)
+                            elseif Config.NotifyType == "okok" then
+                                exports['okokNotify']:Alert("CAN'T PICK", "This mushroom cannot be picked?", 3500, "error")
+                            end 
+                        end
+                    elseif isPickingShroom == true then 
+                        if Config.NotifyType == 'qb' then
+                            QBCore.Functions.Notify('You are already doing something...', "error", 3500)
+                        elseif Config.NotifyType == "okok" then
+                            exports['okokNotify']:Alert("CAN'T PICK", "You are already doing something...", 3500, "error")
+                        end
+                    end 
+                end
+            end
+        end
     else 
         if Config.NotifyType == 'qb' then
             QBCore.Functions.Notify('These cannot be harvested...', "error", 3500)
         elseif Config.NotifyType == "okok" then
             exports['okokNotify']:Alert("WRONG SHROOMS", "These cannot be harvested...", 3500, "error")
         end  
-    end
+     end
 end)
+    
 
 function PrepareAnimShroom()
     local ped = PlayerPedId()
@@ -205,23 +238,54 @@ function PreparingAnimCheckShroom()
     end)
 end
 
-function PickShroomMiniGame()
-    if Config.skillcheck then 
-        exports['ps-ui']:Circle(function(success)
-            if success then
-                TriggerServerEvent('mz-shrooms:server:addShroom')
-                Wait(500)
-                TriggerServerEvent('mz-shrooms:server:removeGlovesSuccess')
-            else
-                TriggerServerEvent('mz-shrooms:server:removeGlovesFail')
+function  PickShroomMiniGame()
+if Config.skillcheck == true then
+    if Config.SkillUse == 'ps-ui' then
+    exports['ps-ui']:Circle(function(success)
+        if success then
+            TriggerServerEvent('mz-shrooms:server:addShroom')
+            Wait(500)
+            if Config.UseGloves then
+            TriggerServerEvent('mz-shrooms:server:removeGlovesSuccess')
+         else
+            if Config.UseGloves then
+            TriggerServerEvent('mz-shrooms:server:removeGlovesFail')
+                end
             end
-        end, Config.ShroomskillCheck, Config.ShroomskillTime)
+        end
+    end, Config.ShroomskillCheck, Config.ShroomskillTime)
+end
+if Config.skillcheck == true then
+    if Config.SkillUse == 'skillbar' then
+        local Skillbar = exports['qb-skillbar']:GetSkillbarObject()
+        Skillbar.Start({
+            duration = Config.SkillbarDuration, -- how long the skillbar runs for
+            pos = Config.SkillbarPos, -- how far to the right the static box is
+            width = Config.SkillbarWidth, -- how wide the static box is
+        }, function()
+            TriggerServerEvent('mz-shrooms:server:addShroom')
+            Wait(500)
+            if Config.UseGloves then
+            TriggerServerEvent('mz-shrooms:server:removeGlovesSuccess')
+            end
+        end, function()
+            if Config.UseGloves then
+            TriggerServerEvent('mz-shrooms:server:removeGlovesFail')
+            end
+        end)
+    end
     else 
         TriggerServerEvent('mz-shrooms:server:addShroom')
         Wait(500)
+        if Config.UseGloves then
         TriggerServerEvent('mz-shrooms:server:removeGlovesSuccess')
+            end
+        end
     end
-end
+    end
+
+
+    
 
 ----------------
 --MAKES GLOVES--
@@ -238,9 +302,13 @@ CreateThread(function()
             options = { 
             {
                 type = "client",
-                event = "mz-shrooms:client:MakeGloves",
                 icon = 'fas fa-sun',
-                label = 'Stitch gloves'
+                event = "mz-shrooms:client:MakeGloves",
+                label = 'Stitch gloves',
+                canInteract = function() -- This will check if you can interact with it, this won't show up if it returns false, this is OPTIONAL
+                    if Config.UseGloves == false then return false end -- This will return false if the entity interacted with is a player and otherwise returns true
+                    return true
+                  end,
             },
         },
         distance = 1.5,
