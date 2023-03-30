@@ -15,6 +15,8 @@ Config.ShroomProp = `prop_stoneshroom1`                     -- GTA V prop asset 
 
 Config.NotifyType = "okok"                                  -- Notification type: 'qb' for qb-core standard notifications, 'okok' for okokNotify notifications
 
+Config.UseGloves = false                                     -- Ability to force player to use gloves to pick shrooms (true), (false) Deletes the polyzone to make gloves and allows players to pick without gloves.
+
 -------------
 --MZ-SKILLS--
 -------------
@@ -36,14 +38,12 @@ Config.SkillbarWidth = math.random(20,30)                   -- How wide the stat
 --Picking shrooms
 Config.ShroomskillCheck = 1                                 -- Lowest number of parses of the skill check
 Config.ShroomskillTime = 10                                 -- Time to complete skill check, the lower - the more difficult. 
-Config.Doublechance = 10                                    -- Chance (in percentage) to pull two mushrooms at once. (Set to 0 to disable)
-
+Config.Doublechance = 10      
 ------------
 --CRAFTING--
 ------------
 
 --Making gloves
-Config.UseGloves = true                                     -- Ability to force player to use gloves to pick shrooms (true), (false) Deletes the polyzone to make gloves and allows players to pick without gloves.
 Config.MakeGlovesLow = 3                                    -- Lowest number of parses of the skill check
 Config.MakeGlovesHigh = 5                                   -- Highest number of parses of the skill check
 Config.MakeGlovesBarLow = 7                                 -- Lowest time it takes (in seconds) to craft gardening gloves.

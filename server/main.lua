@@ -71,8 +71,7 @@ end)
 --MAKE GLOVES--
 ---------------
 
-RegisterServerEvent('mz-shrooms:server:MakeGloves')
-AddEventHandler('mz-shrooms:server:MakeGloves', function()
+RegisterServerEvent('mz-shrooms:server:MakeGloves', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     local fabric = Player.Functions.GetItemByName('fabric')
@@ -93,8 +92,7 @@ AddEventHandler('mz-shrooms:server:MakeGloves', function()
     end
 end)
 
-RegisterServerEvent('mz-shrooms:server:GetGloves')
-AddEventHandler('mz-shrooms:server:GetGloves', function()
+RegisterServerEvent('mz-shrooms:server:GetGloves', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(source)
     Player.Functions.AddItem("gardengloves", 1)
@@ -105,8 +103,7 @@ end)
 --MAKE SHROOM BAG--
 -------------------
 
-RegisterServerEvent('mz-shrooms:server:MakeShroomBags')
-AddEventHandler('mz-shrooms:server:MakeShroomBags', function()
+RegisterServerEvent('mz-shrooms:server:MakeShroomBags', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     local plastic = Player.Functions.GetItemByName('plastic')
@@ -127,8 +124,7 @@ AddEventHandler('mz-shrooms:server:MakeShroomBags', function()
     end
 end)
 
-RegisterServerEvent('mz-shrooms:server:GetShroomBaggy')
-AddEventHandler('mz-shrooms:server:GetShroomBaggy', function()
+RegisterServerEvent('mz-shrooms:server:GetShroomBaggy', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(source)
     Player.Functions.AddItem("shroombaggy", 1)
@@ -139,8 +135,7 @@ end)
 --BAG SHROOMS--
 ---------------
 
-RegisterServerEvent('mz-shrooms:server:BagShrooms')
-AddEventHandler('mz-shrooms:server:BagShrooms', function()
+RegisterServerEvent('mz-shrooms:server:BagShrooms', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     local shroom = Player.Functions.GetItemByName('shroom')
@@ -169,8 +164,7 @@ end)
 
 --LEVEL 0
 
-RegisterServerEvent('mz-shrooms:server:receiveShrooms')
-AddEventHandler('mz-shrooms:server:receiveShrooms', function()
+RegisterServerEvent('mz-shrooms:server:receiveShrooms', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     local quantity = math.random(Config.Shroomlevel0low, Config.Shroomlevel0high)
@@ -180,8 +174,7 @@ end)
 
 --LEVEL 1
 
-RegisterServerEvent('mz-shrooms:server:receiveShroomslevel1')
-AddEventHandler('mz-shrooms:server:receiveShroomslevel1', function()
+RegisterServerEvent('mz-shrooms:server:receiveShroomslevel1', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     local quantity = math.random(Config.Shroomlevel1low, Config.Shroomlevel1high)
@@ -191,8 +184,7 @@ end)
 
 --LEVEL 2
 
-RegisterServerEvent('mz-shrooms:server:receiveShroomslevel2')
-AddEventHandler('mz-shrooms:server:receiveShroomslevel2', function()
+RegisterServerEvent('mz-shrooms:server:receiveShroomslevel2', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     local quantity = math.random(Config.Shroomlevel2low, Config.Shroomlevel2high)
@@ -202,8 +194,7 @@ end)
 
 --LEVEL 3
 
-RegisterServerEvent('mz-shrooms:server:receiveShroomslevel3')
-AddEventHandler('mz-shrooms:server:receiveShroomslevel3', function()
+RegisterServerEvent('mz-shrooms:server:receiveShroomslevel3', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     local quantity = math.random(Config.Shroomlevel3low, Config.Shroomlevel3high)
@@ -213,8 +204,7 @@ end)
 
 --LEVEL 4
 
-RegisterServerEvent('mz-shrooms:server:receiveShroomslevel4')
-AddEventHandler('mz-shrooms:server:receiveShroomslevel4', function()
+RegisterServerEvent('mz-shrooms:server:receiveShroomslevel4', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     local quantity = math.random(Config.Shroomlevel4low, Config.Shroomlevel4high)
@@ -224,8 +214,7 @@ end)
 
 --LEVEL 5
 
-RegisterServerEvent('mz-shrooms:server:receiveShroomslevel5')
-AddEventHandler('mz-shrooms:server:receiveShroomslevel5', function()
+RegisterServerEvent('mz-shrooms:server:receiveShroomslevel5', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     local quantity = math.random(Config.Shroomlevel5low, Config.Shroomlevel5high)
@@ -235,8 +224,7 @@ end)
 
 --LEVEL 6
 
-RegisterServerEvent('mz-shrooms:server:receiveShroomslevel6')
-AddEventHandler('mz-shrooms:server:receiveShroomslevel6', function()
+RegisterServerEvent('mz-shrooms:server:receiveShroomslevel6', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     local quantity = math.random(Config.Shroomlevel6low, Config.Shroomlevel6high)
@@ -246,8 +234,7 @@ end)
 
 --LEVEL 7
 
-RegisterServerEvent('mz-shrooms:server:receiveShroomslevel7')
-AddEventHandler('mz-shrooms:server:receiveShroomslevel7', function()
+RegisterServerEvent('mz-shrooms:server:receiveShroomslevel7', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     local quantity = math.random(Config.Shroomlevel7low, Config.Shroomlevel7high)
@@ -257,8 +244,7 @@ end)
 
 --LEVEL 8
 
-RegisterServerEvent('mz-shrooms:server:receiveShroomslevel8')
-AddEventHandler('mz-shrooms:server:receiveShroomslevel8', function()
+RegisterServerEvent('mz-shrooms:server:receiveShroomslevel8', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     local quantity = math.random(Config.Shroomlevel8low, Config.Shroomlevel8high)
@@ -270,8 +256,7 @@ end)
 --MZ-SKILLS DISABLED--
 ----------------------
 
-RegisterServerEvent('mz-shrooms:server:receiveShroomsNoXP')
-AddEventHandler('mz-shrooms:server:receiveShroomsNoXP', function()
+RegisterServerEvent('mz-shrooms:server:receiveShroomsNoXP', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     local quantity = math.random(Config.ShroomNoXPlow, Config.ShroomNoXPhigh)
